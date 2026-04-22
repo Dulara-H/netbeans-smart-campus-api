@@ -146,19 +146,19 @@ Make sure you have:
 - Maven installed
 - IntelliJ IDEA or NetBeans (recommended)
 
-### Step 1 — Open the project
+### Step 1 - Open the project
 
 Open the Maven project in IntelliJ or NetBeans.
 
-### Step 2 — Let Maven download dependencies
+### Step 2 - Let Maven download dependencies
 
 If prompted, allow Maven to import all project dependencies.
 
-### Step 3 — Run the API
+### Step 3 - Run the API
 
 Run the `Main.java` class.
 
-### Step 4 — Server base URI
+### Step 4 - Server base URI
 
 When the server starts successfully, the console should show something similar to:
 
@@ -168,7 +168,7 @@ Base URI: http://localhost:8080/api/v1/
 Press Enter to stop the server...
 ```
 
-### Step 5 — Verify the server
+### Step 5 - Verify the server
 
 Open Postman or a browser and send:
 
@@ -289,17 +289,17 @@ curl -X POST http://localhost:8080/api/v1/sensors/TEMP-002/readings \
 
 The API was tested in Postman using the following sequence:
 
-1. **Discovery test** — `GET /api/v1/`
-2. **Create room** — `POST /rooms`
-3. **Get all rooms** — `GET /rooms`
-4. **Get one room** — `GET /rooms/{roomId}`
-5. **Create valid sensor** — `POST /sensors`
-6. **Filter sensors** — `GET /sensors?type=...`
-7. **Add sensor reading** — `POST /sensors/{sensorId}/readings`
-8. **Get reading history** — `GET /sensors/{sensorId}/readings`
-9. **Delete room with linked sensors** — expect `409 Conflict`
-10. **Create sensor with invalid roomId** — expect `422 Unprocessable Entity`
-11. **Post reading to maintenance sensor** — expect `403 Forbidden`
+1. **Discovery test** - `GET /api/v1/`
+2. **Create room** - `POST /rooms`
+3. **Get all rooms** - `GET /rooms`
+4. **Get one room** - `GET /rooms/{roomId}`
+5. **Create valid sensor** - `POST /sensors`
+6. **Filter sensors** - `GET /sensors?type=...`
+7. **Add sensor reading** - `POST /sensors/{sensorId}/readings`
+8. **Get reading history** - `GET /sensors/{sensorId}/readings`
+9. **Delete room with linked sensors** - expect `409 Conflict`
+10. **Create sensor with invalid roomId** - expect `422 Unprocessable Entity`
+11. **Post reading to maintenance sensor** - expect `403 Forbidden`
 
 These tests demonstrate both the success paths and the coursework-required error scenarios.
 
@@ -307,7 +307,7 @@ These tests demonstrate both the success paths and the coursework-required error
 
 ## Report: Question Answers
 
-## Part 1 — Service Architecture & Setup
+## Part 1 - Service Architecture & Setup
 
 ### 1. Default lifecycle of a JAX-RS resource class
 
@@ -319,13 +319,14 @@ This also has implications for concurrency. In a server environment, multiple re
 
 ### 2. Why hypermedia is important in RESTful design
 
-Hypermedia, often discussed through the HATEOAS principle, improves RESTful design because the API can guide the client by exposing useful entry points and navigation information. Instead of forcing developers to rely entirely on external documentation, the API can provide links or paths to important resources such as rooms and sensors.
+Hypermedia, often discussed through the HATEOAS principle, improves RESTful desi
+gn because the API can guide the client by exposing useful entry points and navigation information. Instead of forcing developers to rely entirely on external documentation, the API can provide links or paths to important resources such as rooms and sensors.
 
 This benefits client developers because it improves discoverability and reduces hardcoded assumptions. A client can start from the root discovery endpoint and learn where the main collections are located. This makes the API easier to understand, easier to integrate, and more adaptable if the design evolves in the future.
 
 ---
 
-## Part 2 — Room Management
+## Part 2 - Room Management
 
 ### 1. Returning only IDs versus returning full room objects
 
@@ -353,7 +354,7 @@ As a result, the request will not be processed as intended, and the framework wi
 
 ### 2. Why query parameters are better for filtering collections
 
-Using a query parameter such as `/sensors?type=CO2` is the better RESTful approach for filtering because the client is still asking for the same base collection — the sensors collection — but with additional selection criteria applied.
+Using a query parameter such as `/sensors?type=CO2` is the better RESTful approach for filtering because the client is still asking for the same base collection  the sensors collection but with additional selection criteria applied.
 
 A path such as `/sensors/type/CO2` makes the filter look like a completely separate resource path rather than a filtered view of the same collection. Query parameters are more flexible and scalable because more filters can be added later without redesigning the path structure. For example, it would be easy to support combinations such as `?type=CO2&status=ACTIVE` in the future.
 
@@ -387,7 +388,7 @@ This design prevents orphaned sensor records and reflects the coursework require
 
 ### 2. Why HTTP 422 is better than 404 in this scenario
 
-HTTP `422 Unprocessable Entity` is more semantically accurate than `404 Not Found` when the problem is a missing reference inside a valid JSON payload. In the invalid sensor-creation scenario, the endpoint `/api/v1/sensors` does exist, and the JSON request body is syntactically correct. The issue is that one field inside the payload — `roomId` — contains an invalid reference.
+HTTP `422 Unprocessable Entity` is more semantically accurate than `404 Not Found` when the problem is a missing reference inside a valid JSON payload. In the invalid sensor-creation scenario, the endpoint `/api/v1/sensors` does exist, and the JSON request body is syntactically correct. The issue is that one field inside the payload  `roomId`  contains an invalid reference.
 
 A `404` would suggest that the requested URL itself does not exist, which is misleading. A `422` correctly communicates that the server understood the request but could not process it because of a semantic validation error inside the request body.
 
